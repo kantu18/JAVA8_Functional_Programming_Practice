@@ -1,14 +1,7 @@
 package com.example.demo.practice;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -117,8 +110,9 @@ public class Java8_interview_questions {
 	
 		System.out.print("\n");
 		System.out.println(finalconvertlist);
-			
-		
+
+
+
 		/* 8) Filter out the highest and lowest salary for employees in each department*/
 		
 		Employee obj=new Employee("Snehasis","USA",100000,"SDE",7200);
@@ -150,7 +144,12 @@ public class Java8_interview_questions {
 		Comparator<Employee> comobj1=Comparator.comparing(Employee::getSalary).reversed();
 		Map<String, Optional<Employee>> collect3 = emplist.stream().collect(Collectors.groupingBy(emp -> emp.getDept(),
 				Collectors.reducing(BinaryOperator.maxBy(comobj1))));
-		
+
+		//Find the total salary paid to employees in each department.
+		Map<String, Integer> totalSalaryByDept = emplist.stream()
+				.collect(Collectors.groupingBy(Employee::getDept, Collectors.summingInt(Employee::getSalary)));
+
+		System.out.println("Total salary by department: " + totalSalaryByDept);
 		
 		HashMap<String, Integer> mapobj=new HashMap<String, Integer>();
 		mapobj.put("Snehasis", 1);
@@ -168,5 +167,64 @@ public class Java8_interview_questions {
 		
 		System.out.print("\n");
 		System.out.println(collect3);
+	}
+
+	/* 8) Longest substring*/
+	String s1 = "abcabcbb"; // Expected: "abc", length 3
+	String s2 = "bbbbb";
+	// Expected: "b", length 1
+	String s3 = "pwwkew"; // Expected: "wke", length 3
+	String s4 = "";
+// Expected: "", length 0
+		System.out.println("Longest substring without repeating characters in s1: " + lengthOfLongestSubstring(s1)); // Output: 3
+		System.out.println("Longest substring without repeating characters in s2: " + lengthOfLongestSubstring(s2)); // Output: 1
+		System.out.println("Longest substring without repeating characters in s3: " + lengthOfLongestSubstring(s3)); // Output: 3
+		System.out.println("Longest substring without repeating characters in s4: " + lengthOfLongestSubstring(s4)); // Output: 0
+
+
+	public static int lengthOfLongestSubstring(String s) {
+
+		HashSet<Character> set = new HashSet<>();
+		int maxLength = 0;
+		int start = 0;
+		int end = 0;
+		while (end < s.length()) {
+			char currentChar = s.charAt(end);
+			if (!set.contains(currentChar)) {
+				set.add(currentChar);
+				maxLength = Math.max(maxLength, end - start + 1);
+				end++;
+			} else {
+				set.remove(s.charAt(start));
+				start++;
+			}
+		}
+		// Print the longest substring
+		System.out.println("Longest substring: " + s.substring(start, end + 1));
+		return maxLength;
+	}
+
+	//Left rotation of an array by k positions
+	public static int[] rotateLeft(int[] arr, int k) {
+		int n = arr.length;
+		return Arrays.stream(arr)
+				.skip(k % n)
+				.boxed()
+				.collect(Collectors.toList())
+				.stream()
+				.mapToInt(Integer::intValue)
+				.toArray();
+	}
+
+	//Right rotation of an array by k positions
+	public static int[] rotateRight(int[] arr, int k) {
+		int n = arr.length;
+		return Arrays.stream(arr)
+				.skip(n - (k % n))
+				.boxed()
+				.collect(Collectors.toList())
+				.stream()
+				.mapToInt(Integer::intValue)
+				.toArray();
 	}
 }
