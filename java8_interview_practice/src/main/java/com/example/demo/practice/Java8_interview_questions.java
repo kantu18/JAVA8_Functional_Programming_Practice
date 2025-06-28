@@ -112,6 +112,25 @@ public class Java8_interview_questions {
 		System.out.println(finalconvertlist);
 
 
+		//reverse a string
+		String reversed = IntStream.range(0, test.length())  // Create an index stream
+				.mapToObj(i -> test.charAt(test.length() - 1 - i))  // Fetch characters in reverse order
+				.map(String::valueOf)  // Convert characters to String
+				.collect(Collectors.joining());  // Join to form reversed string
+
+		// Print reversed string
+		System.out.println("Reversed String: " + reversed);
+
+		//Swap second and second last character of string
+		int secondIndexstr = 1;
+		int secondLastIndexstr = test.length() - 2;
+
+		// Swap second and second-last character using Streams
+		String swapped = IntStream.range(0, test.length())
+				.mapToObj(i -> i == secondIndexstr ? String.valueOf(test.charAt(secondLastIndexstr)) :  // Replace second with second-last
+						i == secondLastIndexstr ? String.valueOf(test.charAt(secondIndexstr)) :  // Replace second-last with second
+								String.valueOf(test.charAt(i)))  // Keep other characters unchanged
+				.collect(Collectors.joining());
 
 		/* 8) Filter out the highest and lowest salary for employees in each department*/
 		
